@@ -2,6 +2,7 @@ from database import SessionLocal, engine, Base
 from disciplina import Disciplina
 from aluno import Aluno
 from turma import Turma
+from crud import CRUD
 
 # Criar uma nova sessão
 session = SessionLocal()
@@ -11,20 +12,22 @@ Base.metadata.create_all(bind=engine)
 
 # Lógica do seu sistema
 if __name__ == "__main__":
-    disciplina1 = Disciplina("Matemática", "MAT101")
-    session.add(disciplina1)
-    session.commit()
+    session = SessionLocal()
+    
+    # Criar um novo aluno
+    aluno = CRUD.create_aluno(session, "Alice", 1, "alice@email.com")
+    print(aluno)
 
-    aluno1 = Aluno("Alice", 1, "alice@email.com")
-    session.add(aluno1)
-    session.commit()
+    # Buscar um aluno
+    aluno_encontrado = CRUD.read_aluno(session, 1)
+    print(aluno_encontrado)
 
-    turma1 = Turma("T1", disciplina1)
-    session.add(turma1)
-    session.commit()
+    # Atualizar aluno
+    aluno_atualizado = CRUD.update_aluno(session, 1, nome="Alice Atualizada")
+    print(aluno_atualizado)
 
-    # Adicionando alunos à turma
-    turma1.alunos.append(aluno1)  # Adiciona o aluno à turma
-    session.commit()
+    # Deletar aluno
+    sucesso = CRUD.delete_aluno(session, 1)
+    print("Aluno excluído:", sucesso)
 
-    print("Tabelas criadas e dados inseridos.")
+    session.close()
