@@ -3,7 +3,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 # Definir a URI de conexão com o banco de dados MySQL
-DATABASE_URI = 'mysql+pymysql://user:userpassword@localhost:3307/escola_db'
+DATABASE_URI = 'mysql+pymysql://user:userpassword@my_mysql:3306/escola_db'
 
 # Criar o engine que se conecta ao banco de dados
 engine = create_engine(DATABASE_URI)

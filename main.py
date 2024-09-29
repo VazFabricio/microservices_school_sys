@@ -1,33 +1,21 @@
-from database import SessionLocal, engine, Base
-from disciplina import Disciplina
-from aluno import Aluno
-from turma import Turma
-from crud import CRUD
+# main.py
+from fastapi import FastAPI
+from apis.api_aluno import router as aluno_router
+from apis.api_disciplina import router as disciplina_router
+from apis.api_turma import router as turma_router
+from database import Base, engine
 
-# Criar uma nova sessão
-session = SessionLocal()
-
-# Criar as tabelas no banco de dados (se ainda não existirem)
+# Inicializar o banco de dados
 Base.metadata.create_all(bind=engine)
 
-# Lógica do seu sistema
+# Inicializar o app FastAPI
+app = FastAPI()
+
+# Incluir as rotas
+app.include_router(aluno_router, prefix="/alunos")
+app.include_router(disciplina_router, prefix="/disciplinas")
+app.include_router(turma_router, prefix="/turmas")
+
 if __name__ == "__main__":
-    session = SessionLocal()
-    
-    # Criar um novo aluno
-    aluno = CRUD.create_aluno(session, "Alice", 1, "alice@email.com")
-    print(aluno)
-
-    # Buscar um aluno
-    aluno_encontrado = CRUD.read_aluno(session, 1)
-    print(aluno_encontrado)
-
-    # Atualizar aluno
-    aluno_atualizado = CRUD.update_aluno(session, 1, nome="Alice Atualizada")
-    print(aluno_atualizado)
-
-    # Deletar aluno
-    sucesso = CRUD.delete_aluno(session, 1)
-    print("Aluno excluído:", sucesso)
-
-    session.close()
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=9050)
